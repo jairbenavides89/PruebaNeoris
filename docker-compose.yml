@@ -1,0 +1,44 @@
+services:
+### MySQL Container
+  mysql:
+    image: mysql
+    container_name: db
+    build:
+      context: data-base
+      dockerfile: Dockerfile
+      args:
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    env_file:
+      - .env
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - backend
+
+### Client Service Container
+  client-service:
+    image: client-service
+    container_name: client-service
+    build:
+      context: client-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    networks:
+      - backend
+    depends_on:
+      - mysql
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  db:
