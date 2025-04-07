@@ -53,8 +53,8 @@ public class ClientController {
      * @return una respuesta HTTP que contiene el cliente si se encontró, o 404 Not Found si no existe.
      */
     @GetMapping("/{clientId}")
-    public ResponseEntity<?> getClientById(@PathVariable Long clientid) {
-        Optional<Client> clientOptional = service.getClientById(clientid);
+    public ResponseEntity<?> getClientById(@PathVariable Long clientId) {
+        Optional<Client> clientOptional = service.getClientById(clientId);
         if (clientOptional.isPresent()) {
             return ResponseEntity.ok(clientOptional.orElseThrow());
         }

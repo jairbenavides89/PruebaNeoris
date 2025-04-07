@@ -1,6 +1,6 @@
 package com.prueba.jairbenavides.transaction.transaction_service.services;
 
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+/*import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,20 +14,19 @@ import static com.prueba.jairbenavides.transaction.transaction_service.config.Me
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
-import java.util.HashSet;
+import java.util.HashSet;}*/
 
 /**
  * Servicio que escucha eventos de creación de clientes a través de RabbitMQ y 
  * genera una cuenta bancaria para cada cliente nuevo.
  */
-@Service
 public class ClientEventListenerService {
 
-    @Autowired
+    /*@Autowired
     private AccountRepository accountRepository;
 
     private static final SecureRandom random = new SecureRandom();
-
+    */
     /**
      * Maneja el evento de creación de un cliente recibido desde la cola RabbitMQ.
      * <p>
@@ -37,7 +36,7 @@ public class ClientEventListenerService {
      *
      * @param event el evento de creación de cliente que contiene la información del cliente.
      */
-    @RabbitListener(queues = CLIENT_CREATED_QUEUE)
+    /*@RabbitListener(queues = CLIENT_CREATED_QUEUE)
     @Transactional
     public void handleClientCreatedEvent(ClientCreatedEvent event) {
         String accountNumber = generateAccountNumber();
@@ -49,7 +48,7 @@ public class ClientEventListenerService {
 
         accountRepository.save(account);
     }
-
+    */
     /**
      * Genera un número de cuenta único compuesto por 10 dígitos.
      * <p>
@@ -59,7 +58,7 @@ public class ClientEventListenerService {
      *
      * @return un número de cuenta único representado como una cadena de 10 dígitos.
      */
-    private String generateAccountNumber() {
+    /*private String generateAccountNumber() {
         StringBuilder accountNumber = new StringBuilder();
         do {
             accountNumber.setLength(0); // Reinicia el StringBuilder para cada intento
@@ -70,5 +69,5 @@ public class ClientEventListenerService {
         } while (accountRepository.existsByAccountNumber(accountNumber.toString()));
         
         return accountNumber.toString();
-    }
+    }*/
 }

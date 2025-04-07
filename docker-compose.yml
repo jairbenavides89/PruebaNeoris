@@ -19,6 +19,29 @@ services:
       - db:/var/lib/mysql
     networks:
       - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+# RabbitMQ Server
+  #rabbitmq:
+    #image: rabbitmq:3-management
+    #container_name: rabbitmq
+    #ports:
+      #- "5672:5672"
+      #- "15672:15672"
+    #environment:
+      #RABBITMQ_DEFAULT_USER: rabbit
+      #RABBITMQ_DEFAULT_PASS: rabbit
+    #networks:
+      #- backend
+    #healthcheck:
+      #test: ["CMD", "rabbitmqctl", "status"]
+      #interval: 5s
+      #retries: 5
+      #timeout: 3s
 
 ### Client Service Container
   client-service:
@@ -28,13 +51,52 @@ services:
       context: client-service
       dockerfile: Dockerfile
     ports:
-      - "8080:8080"
+      - "8085:8085"
     expose:
-      - "8080"
+      - "8085"
     networks:
       - backend
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
+      #rabbitmq:
+        #condition: service_healthy
+
+### Transaction Service Container
+  transaction-service:
+    image: transaction-service
+    container_name: transaction-service
+    build:
+      context: transaction-service
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    expose:
+      - "8086"
+    networks:
+      - backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+      #rabbitmq:
+        #condition: service_healthy
+      
+### Gateway
+  api-gateway:
+    image: api-gateway
+    container_name: api-gateway
+    build:
+      context: api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    expose:
+      - "8084"
+    networks:
+      - backend
+    depends_on:
+      - client-service
+      - transaction-service
 
 networks:
   backend:

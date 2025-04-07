@@ -64,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
         if (accountOptional.isPresent()) {
             Account accountDb = accountOptional.orElseThrow();
             accountDb.setAccountType(account.getAccountType());
-            accountDb.setAccountNumber(account.getAccountNumber());
+            accountDb.setAccountNumber(generateAccountNumber());
             return Optional.of(repository.save(accountDb));
         }
         return accountOptional;
